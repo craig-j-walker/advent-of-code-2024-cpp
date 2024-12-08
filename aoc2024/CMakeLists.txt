@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.28)
-project(aoc2023 CXX)
+project(aoc2024 CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 26)
@@ -19,3 +19,5 @@ else()
 endif()
 
 add_subdirectory(demo)
+add_subdirectory(day1)
+add_subdirectory(day2)

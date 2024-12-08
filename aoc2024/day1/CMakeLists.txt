@@ -1,0 +1,11 @@
+add_library(input_d1)
+target_sources(input_d1 PUBLIC FILE_SET CXX_MODULES FILES input_d1.cc)
+add_library(example_d1)
+target_sources(example_d1 PUBLIC FILE_SET CXX_MODULES FILES example_d1.cc)
+add_library(part_one_d1)
+target_sources(part_one_d1 PUBLIC FILE_SET CXX_MODULES FILES part_one_d1.cc)
+add_library(part_two_d1)
+target_sources(part_two_d1 PUBLIC FILE_SET CXX_MODULES FILES part_two_d1.cc)
+
+add_executable(main_d1 main_d1.cc)
+target_link_libraries(main_d1 example_d1 input_d1 part_one_d1 part_two_d1)
