@@ -8,7 +8,7 @@
             "name": "C++ Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/day2/main_d2",
+            "program": "${workspaceFolder}/build/day3/main",
             "args": [
                 "arg1",
                 "arg2"

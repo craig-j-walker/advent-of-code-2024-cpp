@@ -18,7 +18,4 @@ else()
       "/usr/local/include/c++/14.0.0/aarch64-linux-gnu/")
 endif()
 
-add_subdirectory(demo)
-add_subdirectory(day1)
-add_subdirectory(day2)
 add_subdirectory(day3)
