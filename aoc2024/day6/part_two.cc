@@ -1,112 +1,101 @@
 module;
-#include <regex>
+#include <cstdint>
+#include <sstream>
+#include <string>
 #include <string_view>
+#include <vector>
 
 export module part_two;
 
 export namespace part_two {
-uint64_t result(const std::string_view input) {
-  uint64_t answer = 0;
-  std::vector<std::tuple<int32_t, int32_t>> rules;
-  std::vector<std::vector<int32_t>> updates;
+
+using namespace std;
+
+bool isCycle(vector<vector<char>> grid, int si, int sj, int sdir, int oi,
+             int oj) {
+  int dirs[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+  int ci = si, cj = sj, dir = sdir;
+  vector<vector<int>> dirc(grid.size(), vector<int>(grid.at(0).size(), -1));
+  do {
+    ci += dirs[dir][0], cj += dirs[dir][1];
+    if (ci >= 0 && ci < grid.size() && cj >= 0 && cj < grid.at(ci).size()) {
+      if (dirc.at(ci).at(cj) == dir) {
+        return true;
+      } else {
+        dirc.at(ci).at(cj) = dir;
+      }
+      if (grid.at(ci).at(cj) == '#' || (ci == oi && cj == oj)) {
+        ci -= dirs[dir][0], cj -= dirs[dir][1];
+        dir = (dir + 1) % 4;
+      }
+    }
+  } while (ci >= 0 && ci < grid.size() && cj >= 0 && cj < grid.at(ci).size());
+  return false;
+}
+
+int part1(vector<vector<char>> grid) {
+  int dirs[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+  int result = 0, ci = 0, cj = 0, dir = 0;
+  for (int i = 0; i < grid.size(); i++) {
+    for (int j = 0; j < grid.at(i).size(); j++) {
+      if (grid.at(i).at(j) == '^') {
+        ci = i, cj = j;
+        break;
+      }
+    }
+  }
+  do {
+    if (grid.at(ci).at(cj) != 'X') {
+      grid.at(ci).at(cj) = 'X';
+      result++;
+    }
+    ci += dirs[dir][0], cj += dirs[dir][1];
+    if (ci >= 0 && ci < grid.size() && cj >= 0 && cj < grid.at(ci).size() &&
+        grid.at(ci).at(cj) == '#') {
+      ci -= dirs[dir][0], cj -= dirs[dir][1];
+      dir = (dir + 1) % 4;
+    }
+  } while (ci >= 0 && ci < grid.size() && cj >= 0 && cj < grid.at(ci).size());
+  return result;
+}
+
+int result(std::string_view sv) {
+  vector<vector<char>> grid;
+  std::stringstream ss((std::string(sv)));
   std::string row;
-  std::stringstream ss((std::string(input)));
-  bool inRules = true;
 
   while (std::getline(ss, row, '\n')) {
 
     std::stringstream rowStream(row);
+    char square;
+    std::vector<char> mapRow;
 
-    if (row == "") {
-
-      inRules = false;
-
-    } else if (inRules) {
-
-      int32_t left;
-      char bar;
-      int32_t right;
-
-      rowStream >> left;
-      rowStream >> bar;
-      rowStream >> right;
-      rules.push_back(std::tuple<int32_t, int32_t>(left, right));
-
-    } else {
-      std::string item;
-      int32_t value;
-      std::vector<int32_t> update;
-
-      while (std::getline(rowStream, item, ',')) {
-        value = stoi(item);
-        update.push_back(value);
-      }
-      updates.push_back(update);
+    for (uint32_t j = 0; j < row.size(); j++) {
+      rowStream >> square;
+      mapRow.push_back(square);
     }
+    grid.push_back(mapRow);
   }
-
-  for (auto &update : updates) {
-    int i = 0;
-    bool ruleBreak = false;
-    for (auto &page : update) {
-      for (auto &rule : rules) {
-        int32_t left = std::get<0>(rule);
-        int32_t right = std::get<1>(rule);
-        if (page == left) {
-          for (int32_t j = i - 1; j >= 0; j--) {
-            if (right == update[j]) {
-              ruleBreak = true;
-              break;
-            }
-          }
-          if (ruleBreak) {
-            break;
-          }
-        } else if (page == right) {
-          for (int32_t j = i + 1; j < update.size(); j++) {
-            if (left == update[j]) {
-              ruleBreak = true;
-              break;
-            }
-          }
-          if (ruleBreak) {
-            break;
-          }
-        }
-        if (ruleBreak) {
-          break;
-        }
-      }
-      if (ruleBreak) {
+  int result = 0, ci = 0, cj = 0, dir = 0;
+  for (int i = 0; i < grid.size(); i++) {
+    for (int j = 0; j < grid.at(i).size(); j++) {
+      if (grid.at(i).at(j) == '^') {
+        ci = i, cj = j;
         break;
       }
-      i++;
-    }
-    if (ruleBreak) {
-      for (int l = 0; l < update.size(); l++) {
-        int k = 0;
-        for (auto &page : update) {
-          for (auto &rule : rules) {
-            int32_t left = std::get<0>(rule);
-            int32_t right = std::get<1>(rule);
-            if (page == right) {
-              for (int32_t j = k + 1; j < update.size(); j++) {
-                if (left == update[j]) {
-                  int32_t temp = update[j];
-                  update.erase(update.begin() + j);
-                  update.insert(update.begin() + k, temp);
-                }
-              }
-            }
-          }
-          k++;
-        }
-      }
-      int32_t middle = update.size() / 2;
-      int64_t updateResult = update[middle];
-      answer += updateResult;
     }
   }
-  return answer;
+  for (int i = 0; i < grid.size(); i++) {
+    for (int j = 0; j < grid.at(i).size(); j++) {
+      if (i == ci && j == cj) {
+        continue;
+      }
+      auto testGrid(grid);
+      if (isCycle(testGrid, ci, cj, dir, i, j)) {
+        result++;
+      }
+    }
+  }
+  return result;
 }
 } // namespace part_two

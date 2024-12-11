@@ -8,7 +8,7 @@
             "name": "C++ Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/day3/main",
+            "program": "${workspaceFolder}/build/day6/main",
             "args": [
                 "arg1",
                 "arg2"
@@ -23,7 +23,7 @@
             "externalConsole": true,
             "stopAtEntry": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "",
+            "miDebuggerPath": "/usr/bin/gdb",
             "setupCommands": [
                 {
                     "text": "target-run",

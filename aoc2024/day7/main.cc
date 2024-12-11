@@ -5,7 +5,6 @@ import part_two;
 
 #include <cstdint>
 #include <iostream>
-#include <vector>
 
 int main() {
   uint64_t result = part_one::result(input::input);
