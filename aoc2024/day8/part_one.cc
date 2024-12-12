@@ -78,7 +78,7 @@ uint64_t result(const std::string_view input) {
 
   FindAntinodes(antennae, antinodes, finalRow, finalCol);
 
-  for (int i = 0; i <= finalRow; i++) {
+  /* for (int i = 0; i <= finalRow; i++) {
     for (int j = 0; j <= finalCol; j++) {
       for (auto const &antenna : antennae) {
         if (antenna.row == i && antenna.col == j) {
@@ -93,7 +93,7 @@ uint64_t result(const std::string_view input) {
       }
     }
     std::cout << std::endl;
-  }
+  } */
   return antinodes.size();
 }
 } // namespace part_one
